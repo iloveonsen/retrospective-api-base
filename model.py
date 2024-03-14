@@ -6,7 +6,9 @@ from langchain_community.llms import LlamaCpp
 from langchain.chains import LLMChain
 
 import torch
-
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
+from typing import List
 from loguru import logger
 
 from config import config
@@ -32,6 +34,21 @@ def load_tf_model():
 def get_tf_model():
     return tf_device, tf_tokenizer, tf_model
 
+
+def make_summary(chunks: List[str], device: torch.device, tokenizer: AutoTokenizer, model: PreTrainedModel) -> str:
+    inputs = tokenizer(chunks, return_tensors="pt", padding=True, truncation=True, max_length=64).to(device)
+    outputs = model.generate(
+        inputs.input_ids,
+        attention_mask=inputs.attention_mask, 
+        max_length=64, num_beams=5, length_penalty=1.2, use_cache=True, early_stopping=True).detach().cpu()
+    summary = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    return "".join(summary)
+
+
+def async_func(sync_func, *args, **kwargs):
+    loop = asyncio.get_event_loop()
+    with ThreadPoolExecutor() as pool:
+        return loop.run_in_executor(pool, sync_func, *args, **kwargs) # sync_func(*args, **kwargs)
 
 
 
