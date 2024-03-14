@@ -7,7 +7,7 @@ from loguru import logger
 
 from api import router
 from database import engine, Retrospective
-from model import load_chain
+from model import load_tf_model, load_llm_chain
 
 
 
@@ -23,9 +23,11 @@ async def lifespan(app: FastAPI):
         except Exception as e:
             logger.error(f"Error creaing table: {e}")
 
+    logger.info("Loading transformers model")
+    load_tf_model()
     
-    logger.info("Loading chain")
-    load_chain()
+    logger.info("Loading llm chain")
+    load_llm_chain()
 
     yield
 
