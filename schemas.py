@@ -2,8 +2,10 @@ from pydantic import BaseModel, Field
 from typing import List
 
 
+
 class ModelGenerationRequest(BaseModel):
     text: str
+
 
 class ModelGenerationResponse(BaseModel):
     text: str
@@ -17,3 +19,4 @@ class RetrospectiveRequest(BaseModel):
 
 class RetrospectiveResponse(BaseModel):
     text: str
+
