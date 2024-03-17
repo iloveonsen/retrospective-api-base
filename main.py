@@ -8,6 +8,9 @@ from loguru import logger
 from api import router
 from database import engine, Retrospective
 from model import load_tf_model, load_llm_chain
+from config import config
+
+import os
 
 
 
@@ -15,7 +18,12 @@ from model import load_tf_model, load_llm_chain
 async def lifespan(app: FastAPI):
     logger.info("Starting application")
 
-    logger.info("Creating database connection")
+    logger.info(f"DB_USERNAME: {os.environ.get('DB_USERNAME')}")
+    logger.info(f"DB_PASSWORD: {os.environ.get('DB_PASSWORD')}")
+    logger.info(f"DB_HOST: {os.environ.get('DB_HOST')}")
+    logger.info(f"DB_NAME: {os.environ.get('DB_NAME')}")
+
+    logger.info(f"Creating database connection to {config.db_url}")
     async with engine.begin() as conn:
         try:
             await conn.run_sync(SQLModel.metadata.create_all)

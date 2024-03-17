@@ -43,8 +43,8 @@ async def generate_chain(request: ModelGenerationRequest,
                          llm_chain: LLMChain = Depends(get_llm_chain)) -> ModelGenerationResponse:
     
     context = {
-        "input": "너는 사용자에게 도움을 주는 AI야",
-        "instruction": request.text
+        "username": request.username,
+        "summary": request.text
     }
     
     result = await llm_chain.ainvoke(input=context)

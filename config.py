@@ -2,9 +2,9 @@ from pydantic import Field
 from pydantic_settings import BaseSettings
 
 import os
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
-load_dotenv()
+# load_dotenv()
 
 
 DB_USERNAME = os.environ.get("DB_USERNAME") 
