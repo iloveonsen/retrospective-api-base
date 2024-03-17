@@ -1,6 +1,8 @@
 # Custom
 *.gguf
 test/
+docker-compose.bak/
+dockerfile.bak/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
