@@ -23,7 +23,8 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
-
+    image: "iloveonsen/retrospecive-api:latest"
+    container_name: "retrospective-api"
       
   postgres_db:
     image: "pgvector/pgvector:0.6.1-pg16"
@@ -34,6 +35,16 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    container_name: "postgres-vector-db"
+  
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - retrospective_app
+    image: "iloveonsen/retrospective-nginx:latest"
+    container_name: "retrospective-nginx"
 
 volumes:
   model_data:
